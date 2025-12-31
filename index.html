@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise for Ilin!</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #0b0d17;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+        .container {
+            text-align: center;
+            z-index: 10;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #ffeb3b;
+            text-shadow: 0 0 10px #f39c12;
+        }
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        button:hover {
+            transform: scale(1.1);
+            background: #ff5e57;
+        }
+        #message {
+            display: none;
+            margin-top: 20px;
+            font-size: 2rem;
+            animation: fadeIn 2s;
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="title">Hey elin! ✨</h1>
+        <button onclick="startSurprise()">Click for Surprise!</button>
+        <div id="message">
+            <h2>You are the Best! 🎆</h2>
+            <p>আমাদের বন্ধুত্ব সবসময় এভাবেই উজ্জ্বল থাকুক!</p>
+        </div>
+    </div>
+
+    <script>
+        function startSurprise() {
+            // বাটন হাইড করা
+            document.querySelector('button').style.display = 'none';
+            document.getElementById('title').style.display = 'none';
+            document.getElementById('message').style.display = 'block';
+
+            // ফায়ারওয়ার্কস অ্যানিমেশন (Canvas Confetti Library)
+            var duration = 15 * 1000;
+            var animationEnd = Date.now() + duration;
+            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+            function randomInRange(min, max) {
+              return Math.random() * (max - min) + min;
+            }
+
+            var interval = setInterval(function() {
+              var timeLeft = animationEnd - Date.now();
+
+              if (timeLeft <= 0) {
+                return clearInterval(interval);
+              }
+
+              var particleCount = 50 * (timeLeft / duration);
+              // আতশবাজি ইফেক্ট
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+            }, 250);
+        }
+    </script>
+</body>
+</html>
