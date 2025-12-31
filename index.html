@@ -1,99 +1,176 @@
-<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surprise for Ilin!</title>
+    <title>A Special Gift for Ilin</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
+            background-color: #1a1a2e;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #0b0d17;
-            font-family: 'Arial', sans-serif;
             overflow: hidden;
-            color: white;
         }
-        .container {
+
+        /* মিউজিক প্লেয়ার হাইড থাকবে */
+        #bg-music { display: none; }
+
+        .start-screen {
             text-align: center;
-            z-index: 10;
+            z-index: 100;
         }
-        h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: #ffeb3b;
-            text-shadow: 0 0 10px #f39c12;
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            background: #e74c3c;
+
+        .start-btn {
+            padding: 15px 40px;
+            font-size: 20px;
+            background: #e94560;
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 30px;
             cursor: pointer;
+            box-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
             transition: 0.3s;
-            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
         }
-        button:hover {
-            transform: scale(1.1);
-            background: #ff5e57;
-        }
-        #message {
+
+        .start-btn:hover { transform: scale(1.1); }
+
+        /* বইয়ের ডিজাইন */
+        .book-container {
             display: none;
-            margin-top: 20px;
-            font-size: 2rem;
-            animation: fadeIn 2s;
+            perspective: 1500px;
         }
-        @keyframes fadeIn {
-            from {opacity: 0;}
-            to {opacity: 1;}
+
+        .book {
+            width: 300px;
+            height: 400px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 1s;
         }
+
+        .page {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 5px 15px 15px 5px;
+            transform-origin: left;
+            transform-style: preserve-3d;
+            transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            box-shadow: inset 3px 0px 10px rgba(0,0,0,0.1);
+            cursor: pointer;
+            backface-visibility: hidden;
+        }
+
+        .page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        .page h2 { color: #e94560; font-size: 24px; margin-bottom: 10px; }
+        .page p { font-size: 18px; line-height: 1.5; color: #555; }
+        .page-num { position: absolute; bottom: 10px; font-size: 12px; color: #999; }
+
+        /* ব্যাকগ্রাউন্ড ফায়ারওয়ার্কস */
+        canvas { position: absolute; top: 0; left: 0; pointer-events: none; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1 id="title">Hey elin! ✨</h1>
-        <button onclick="startSurprise()">Click for Surprise!</button>
-        <div id="message">
-            <h2>You are the Best! 🎆</h2>
-            <p>আমাদের বন্ধুত্ব সবসময় এভাবেই উজ্জ্বল থাকুক!</p>
+    <iframe id="bg-music" src="https://www.youtube.com/embed/5O6G6YyS394?autoplay=1&loop=1" allow="autoplay"></iframe>
+
+    <div class="start-screen" id="start-screen">
+        <h1 style="font-size: 35px; color: #f1c40f;">Hey Ilin! ✨</h1>
+        <p>I have a little story for you...</p>
+        <button class="start-btn" onclick="openBook()">Click for Surprise!</button>
+    </div>
+
+    <div class="book-container" id="book-container">
+        <div class="book">
+            <div class="page" onclick="nextPage(this)" style="z-index: 5;">
+                <h2>শুভ নববর্ষ, ইলিন পাখি 😹! 🎈</h2>
+                <p>নতুন বছরে আমাদের বন্ধুত্বের গল্পটা শুরু হোক এভাবে...</p>
+                <span class="page-num">Next ></span>
+            </div>
+
+            <div class="page" onclick="nextPage(this)" style="z-index: 4;">
+                <h2> Loveee Youu Pakhi 🩵🍬</h2>
+                <p>কখনো রাগানো, কখনো অনেক হাসি। তুই আছো বলেই জীবনটা এত রঙিন পাখি!
+                সামনের বছর গুলো ও ঠিক এমন ভাবেই যেনো আমরা কাটিয়ে দিতে পারি 🩵</p>
+                <span class="page-num">Next ></span>
+            </div>
+
+            <div class="page" onclick="nextPage(this)" style="z-index: 3;">
+                <h2>তুই সেরা! 🏆</h2>
+                <p>সব সময় পাশে থাকার জন্য ধন্যবাদ পাখি। তুই আমার অনেক আদরের পাখি 😊!
+                    অনেক ভালবাসি তোমাকে পাখি🩵 আমি কোনো ভুল ত্রুটি করলে ক্ষমা করে দিও ।আর আমাকে নিজের মতো ভালবেসো পাখি </p>
+                <span class="page-num">Next ></span>
+            </div>
+
+            <div class="page" style="z-index: 2;">
+                <h2>Happy New Year! ✨</h2>
+                <p>এই বছরটা আমাদের জন্য অনেক অনেক খুশি নিয়ে আসুক। সবসময় যেন হাসিখুশি থাকতে পারি !</p>
+                <p style="font-size: 30px;">🎆🎆🎆</p>
+            </div>
         </div>
     </div>
 
     <script>
-        function startSurprise() {
-            // বাটন হাইড করা
-            document.querySelector('button').style.display = 'none';
-            document.getElementById('title').style.display = 'none';
-            document.getElementById('message').style.display = 'block';
+        function openBook() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('book-container').style.display = 'block';
+            startFireworks();
+        }
 
-            // ফায়ারওয়ার্কস অ্যানিমেশন (Canvas Confetti Library)
-            var duration = 15 * 1000;
-            var animationEnd = Date.now() + duration;
-            var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+        function nextPage(btn) {
+            btn.classList.add('flipped');
+            // প্রতিবার পৃষ্ঠা উল্টালে হালকা আতশবাজি হবে
+            confetti({
+                particleCount: 40,
+                spread: 70,
+                origin: { y: 0.6 }
+            });
+        }
 
-            function randomInRange(min, max) {
-              return Math.random() * (max - min) + min;
-            }
+        function startFireworks() {
+            var duration = 30 * 1000;
+            var end = Date.now() + duration;
 
-            var interval = setInterval(function() {
-              var timeLeft = animationEnd - Date.now();
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: ['#ff0000', '#00ff00', '#0000ff']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: ['#ffff00', '#ff00ff', '#00ffff']
+                });
 
-              if (timeLeft <= 0) {
-                return clearInterval(interval);
-              }
-
-              var particleCount = 50 * (timeLeft / duration);
-              // আতশবাজি ইফেক্ট
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-              confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
     </script>
 </body>
