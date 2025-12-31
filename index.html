@@ -3,349 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise for My Pakhi!</title>
+    <title>Surprise for My Pakhi!</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         body {
-            background-color: #0d0a1b; /* ডিপ পার্পল/ব্লু ব্যাকগ্রাউন্ড */
+            background-color: #0d0a1b;
             color: #fff;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            position: relative;
         }
 
-        #bg-music { display: none; }
-
-        /* স্টার্ট স্ক্রিন - গিফট বক্স */
-        .start-screen {
-            text-align: center;
-            z-index: 100;
-        }
-
-        .gift-box-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto 30px;
-            cursor: pointer;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .gift-box-container:hover {
-            transform: scale(1.05);
-        }
-
+        /* গিফট বক্স ডিজাইন */
+        .gift-box-container { text-align: center; cursor: pointer; transition: 0.3s; }
         .gift-box {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: #e94560; /* রেডিশ পিঙ্ক */
-            border-radius: 10px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-            transform-origin: bottom;
-            transition: transform 0.5s ease-out;
+            width: 150px; height: 150px; background: #e94560; margin: 0 auto;
+            position: relative; border-radius: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-
         .gift-lid {
-            position: absolute;
-            top: -30px;
-            width: 120%;
-            left: -10%;
-            height: 50px;
-            background-color: #c0392b; /* ডার্কার রেড */
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            transition: transform 0.5s ease-out;
-            transform-origin: center bottom;
+            width: 170px; height: 40px; background: #c0392b;
+            position: absolute; top: -10px; left: -10px; border-radius: 5px;
+            transition: 0.5s;
         }
-
-        .gift-box-container.opened .gift-lid {
-            transform: rotateX(80deg) translateY(-50px);
-        }
-
-        .ribbon {
-            position: absolute;
-            width: 30px;
-            height: 100%;
-            background-color: #f1c40f; /* গোল্ডেন ইয়েলো */
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .ribbon-h {
-            position: absolute;
-            width: 100%;
-            height: 30px;
-            background-color: #f1c40f;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .bow {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            background-color: #f1c40f;
-            border-radius: 50%;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .bow::before, .bow::after {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            background-color: #f1c40f;
-            border-radius: 50%;
-            top: 10px;
-        }
-        .bow::before { left: -15px; }
-        .bow::after { right: -15px; }
-
-
-        .message-text {
-            font-size: 28px;
-            color: #ffeb3b;
-            text-shadow: 0 0 10px #f39c12;
-            margin-top: 20px;
-        }
+        .opened .gift-lid { transform: translateY(-50px) rotate(-10deg); opacity: 0; }
+        .ribbon { width: 20px; height: 100%; background: #f1c40f; margin: 0 auto; }
 
         /* বইয়ের ডিজাইন */
-        .book-container {
-            display: none;
-            perspective: 1500px;
-            z-index: 50;
-        }
-
-        .book {
-            width: 320px;
-            height: 450px;
-            position: relative;
-            transform-style: preserve-3d;
-        }
-
+        .book-container { display: none; perspective: 1500px; }
+        .book { width: 300px; height: 400px; position: relative; transform-style: preserve-3d; }
+        
         .page {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            background: #ffffff;
-            color: #333;
-            padding: 30px;
-            box-sizing: border-box;
-            border-radius: 5px 15px 15px 5px;
-            transform-origin: left;
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            background: white; color: #333; padding: 30px; box-sizing: border-box;
+            border-radius: 5px 15px 15px 5px; transform-origin: left;
             transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; backface-visibility: hidden;
+            box-shadow: inset 3px 0px 10px rgba(0,0,0,0.1), 5px 5px 15px rgba(0,0,0,0.2);
             cursor: pointer;
-            backface-visibility: hidden;
-            box-shadow: inset 3px 0px 10px rgba(0,0,0,0.1), 5px 5px 20px rgba(0,0,0,0.3);
         }
 
         .page.flipped { transform: rotateY(-180deg); }
-
-        h2 { color: #e94560; font-size: 24px; margin-bottom: 15px; }
-        p { font-size: 18px; line-height: 1.6; color: #444; font-weight: 500; }
-        .page-num { position: absolute; bottom: 15px; font-size: 13px; color: #999; }
+        h2 { color: #e94560; margin-bottom: 10px; }
+        p { font-size: 18px; line-height: 1.5; }
 
         /* বেলুন */
-        .balloon-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            display: none; /* শুরুতে হাইড থাকবে */
-            justify-content: center;
-            align-items: center;
-            z-index: 100;
-        }
-
+        #balloon-container { display: none; text-align: center; cursor: pointer; }
         .balloon {
-            width: 150px;
-            height: 200px;
-            background-color: #ff6b6b; /* লালচে */
+            width: 120px; height: 160px; background: #ff6b6b;
             border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-            position: relative;
-            cursor: pointer;
-            animation: float 8s ease-in-out infinite alternate, spin 10s linear infinite;
-            box-shadow: inset -10px -10px 0px rgba(0,0,0,0.2), 0 0 20px rgba(255,107,107,0.7);
-            transition: transform 0.1s;
+            margin: 0 auto; animation: float 3s ease-in-out infinite;
+            box-shadow: inset -10px -10px 0 rgba(0,0,0,0.1);
         }
-
-        .balloon:active { transform: scale(0.9); }
-
-        .balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 20px solid #ff6b6b; /* বেলুনের রঙের সাথে মিলবে */
-        }
-
-        .balloon::after {
-            content: '';
-            position: absolute;
-            bottom: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 2px;
-            height: 40px;
-            background-color: #ccc;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px) rotateZ(0deg); }
-            50% { transform: translateY(-50px) rotateZ(5deg); }
-            100% { transform: translateY(0px) rotateZ(0deg); }
-        }
-        @keyframes spin {
-            from { transform: rotateZ(0deg); }
-            to { transform: rotateZ(360deg); }
-        }
-
-        .final-message {
-            position: absolute;
-            font-size: 45px;
-            color: #f1c40f; /* গোল্ডেন ইয়েলো */
-            text-shadow: 0 0 15px #ffeb3b, 0 0 30px #f39c12;
-            z-index: 200;
-            display: none;
-            animation: popOut 1s forwards;
-            white-space: nowrap; /* লেখা এক লাইনে রাখতে */
-        }
-
-        @keyframes popOut {
-            0% { transform: scale(0); opacity: 0; }
-            80% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 1; }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        #final-msg { display: none; font-size: 40px; color: #f1c40f; text-shadow: 0 0 10px #f39c12; }
     </style>
 </head>
 <body>
 
-    <iframe id="bg-music" src="https://www.youtube.com/embed/5O6G6YyS394?autoplay=1&loop=1" allow="autoplay"></iframe>
+    <iframe style="display:none" src="https://www.youtube.com/embed/5O6G6YyS394?autoplay=1&loop=1" allow="autoplay"></iframe>
 
-    <div class="start-screen" id="start-screen">
-        <h1 style="font-size: 35px; color: #f1c40f;">Hey Ilin! ✨</h1>
-        <p>I have a special gift just for you...</p>
-        <div class="gift-box-container" onclick="openGift()">
-            <div class="gift-box">
-                <div class="ribbon"></div>
-                <div class="ribbon-h"></div>
-                <div class="bow"></div>
-            </div>
+    <div id="start-screen" class="gift-box-container" onclick="openGift()">
+        <h1 style="color:#f1c40f">Hey Pakhi! ✨</h1>
+        <div class="gift-box" id="gift">
             <div class="gift-lid"></div>
+            <div class="ribbon"></div>
         </div>
-        <p class="message-text" id="gift-message" style="display:none;">Love You My Dear Pakhi! 🩷</p>
+        <p id="gift-txt" style="display:none; font-size: 25px; margin-top: 20px;">Love You My Dear Pakhi 🩷</p>
     </div>
 
     <div class="book-container" id="book-container">
         <div class="book">
-            <div class="page" style="z-index: 1;">
-                <h2>শুভ নববর্ষ, পাখি! 🎆</h2>
-                <p>কলেজ লাইফ থেকে শুরু করে আজ পর্যন্ত, আমাদের বন্ধুত্ব হাজারো দুষ্টু-মিষ্টি স্মৃতিতে ভরা।</p>
+            <div class="page" id="last-page" style="z-index: 1;">
+                <h2>আমাদের বন্ধুত্ব ✨</h2>
+                <p>নতুন বছরেও যেন এভাবেই সব পাগলামি নিয়ে আমরা পাশে থাকি , এমন করে সারা জীবন আমরা একসাথে কাটাতে পারি 🩵।</p>
+                <button onclick="showBalloon()" style="margin-top:20px; padding:10px; cursor:pointer">Click for Magic</button>
             </div>
-            <div class="page" onclick="nextPage(this)" style="z-index: 2;">
-                <h2>সবচেয়ে প্রিয় তুমি পাখি 👭</h2>
-                <p>আমার সব আবদার, সব পাগলামি শুধু তুই ই সয়েছিস। আর আমার পাশে সবসময় তোকেই পেয়েছি পাখি 🩵।</p>
-                <span class="page-num">Next ></span>
+            <div class="page" onclick="flipPage(this)" style="z-index: 2;">
+                <h2>স্মৃতিগুলো 🍬</h2>
+                <p>সেই কলেজ লাইফের পরিচয় সেই থেকে কত আপন হয়ে ওঠা—সবই ছিল দারুণ!পাখি 🩷</p>
             </div>
-            <div class="page" onclick="nextPage(this)" style="z-index: 3;">
-                <h2>অবিস্মরণীয় স্মৃতি ✨</h2>
-                <p>কলেজের সময়গুলো , পরীক্ষার সময়ের কাহিনী গুলো তোর সাথে করা হাজারো বোকামিগুলো এখনো মনে পড়ে, আর মুখে হাসি এনে দেয়!😹</p>
-                <span class="page-num">Next ></span>
+            <div class="page" onclick="flipPage(this)" style="z-index: 3;">
+                <h2>দুষ্টু মিষ্টি দিন 🍭</h2>
+                <p>তোর সাথে কাটানো প্রতিটা মুহূর্ত আমার কাছে স্পেশাল। দেখতে দেখতে আমাদের কলেজ লাইফ শেষ, 
+                প্রায় তিন বছর কেটে গেল কিন্তু আমাদের দুষ্টু মিষ্টি সম্পর্কটা ঠিক এমনই যেন মজবুত থাকে সেই প্রত্যাশা করি সব সময় পাখি 🩷</p>
             </div>
-            <div class="page" onclick="nextPage(this)" style="z-index: 4;">
-                <h2>আমার পাখি 🐥</h2>
-                <p>তুই শুধু আমার বেস্টফ্রেন্ড ই না, তুই আমার পরিবারের একজন। এই নতুন বছরেও আমাদের এই বন্ধন অটুট থাকুক!পাখি 🩷</p>
-                <span class="page-num">Next ></span>
-            </div>
-            <div class="page" onclick="showBalloon()" style="z-index: 5;">
-                <h2>এই গিফটের পর আরেকটা ছোট্ট উপহার...</h2>
-                <p>আরেকবার ক্লিক কর, একটা ম্যাজিক দেখবি!</p>
-                <span class="page-num">Next ></span>
+            <div class="page" onclick="flipPage(this)" style="z-index: 4;">
+                <h2>প্রিয় পাখি 🐥</h2>
+                <p>আর তুই শুধু আমার বেস্ট ফ্রেন্ড ই না , আমার পাখি, আমার ইলিন, আমার সবকিছু ।</p>
             </div>
         </div>
     </div>
 
-    <div class="balloon-container" id="balloon-container">
-        <div class="balloon" onclick="popBalloon()"></div>
-        <div class="final-message" id="final-message">শুভ নববর্ষ, পাখি! 🩷</div>
+    <div id="balloon-container" onclick="popBalloon()">
+        <div class="balloon"></div>
+        <p style="margin-top: 20px;">Tap the balloon to pop!</p>
     </div>
+    <h1 id="final-msg">নতুন বছরের শুভেচ্ছা পাখি 🩷</h1>
 
     <script>
-        let currentPage = 0;
-        const pages = document.querySelectorAll('.book .page');
-        const totalPages = pages.length;
-
         function openGift() {
-            document.querySelector('.gift-box-container').classList.add('opened');
-            confetti({
-                particleCount: 100,
-                spread: 120,
-                origin: { y: 0.6 }
-            });
+            document.getElementById('gift').classList.add('opened');
+            document.getElementById('gift-txt').style.display = 'block';
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+            
             setTimeout(() => {
-                document.getElementById('gift-message').style.display = 'block';
-                setTimeout(() => {
-                    document.getElementById('start-screen').style.display = 'none';
-                    document.getElementById('book-container').style.display = 'block';
-                }, 2000); // মেসেজ দেখানোর পর ২ সেকেন্ড অপেক্ষা করে বই দেখাবে
-            }, 1000); // গিফট বক্স খোলার ১ সেকেন্ড পর
+                document.getElementById('start-screen').style.display = 'none';
+                document.getElementById('book-container').style.display = 'block';
+            }, 2500);
         }
 
-        function nextPage(el) {
-            el.classList.add('flipped');
-            confetti({
-                particleCount: 30,
-                spread: 50,
-                origin: { y: 0.7 }
-            });
-            currentPage++;
-            if (currentPage >= totalPages) {
-                // শেষ পাতায় ক্লিক করার পর বেলুন দেখাবে
-                setTimeout(showBalloon, 1500); // একটু দেরি করে বেলুন দেখাবে
-            }
+        function flipPage(page) {
+            page.classList.add('flipped');
+            confetti({ particleCount: 20, spread: 40, origin: { y: 0.7 } });
         }
 
         function showBalloon() {
             document.getElementById('book-container').style.display = 'none';
-            document.getElementById('balloon-container').style.display = 'flex';
+            document.getElementById('balloon-container').style.display = 'block';
         }
 
         function popBalloon() {
-            document.querySelector('.balloon').style.display = 'none'; // বেলুন গায়েব
-            document.getElementById('final-message').style.display = 'block'; // ফাইনাল মেসেজ দেখাবে
-
-            // বেলুন ফেটে যাওয়ার কনফেটি
-            confetti({
-                particleCount: 150,
-                spread: 180,
-                origin: { y: 0.5 },
-                colors: ['#ff6b6b', '#f1c40f', '#e94560', '#ffffff']
-            });
-            // মিউজিক অফ করা যেতে পারে যদি চান
-            // document.getElementById('bg-music').pause();
+            document.getElementById('balloon-container').style.display = 'none';
+            document.getElementById('final-msg').style.display = 'block';
+            confetti({ particleCount: 200, spread: 160, origin: { y: 0.5 } });
         }
     </script>
 </body>
